@@ -1,0 +1,16 @@
+{
+	"name" : "The Strawnode Project",
+	"version" : "0.0.1",
+	"description" : "Strawnode's example app",
+	"dependencies":[
+		"trace.js",
+		"type.js",
+		"strawexpress.js",
+		"strawjade.js",
+		"betweenjs.js",
+		"strawnode_modules/jquery-1.8.1.min.js",
+		"strawnode_modules/jquery.ba-hashchange.min.js",
+		// "strawnode_modules/marked.js",
+		// "strawnode_modules/jade.min.js"
+	]
+}

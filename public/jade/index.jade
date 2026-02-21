@@ -1,0 +1,94 @@
+extends ./layout
+include ./artists/mixins 
+block content
+	#back.back.abs.left0.top0.right0.bottom0.fullW.fullH.coloraddict.context(class="flex content-center" style="background:#121212")
+		//- +videoblock
+		.abs.top0.left0(style="width: 100vw;height: 100vh;box-sizing:border-box")
+			canvas#backshader.fullH.fullW(style="opacity:.5")
+		
+	
+	#frame.frame.abs.left0.top0.right0.bottom0.fullW.fullH.context
+		.toprightlinks.lh2.txtC.marXLg.abs.right0.languages(style="z-index:300")
+			ul.langswitch(class="flex flex-row")
+				li
+					a.inline-block.padding.white.langchange(href="#/en/" class="en") EN
+				li
+					a.inline-block.padding.white.langchange(href="#/fr/" class="fr") FR
+				li
+					a.inline-block.padding.white.langchange(href="#/ko/" class="kr") KR
+		
+		//- include ./pipe
+		
+		.zoneallcontain.fullW.fullH.zi3.context
+			.zoneall(class="h-full flex flex-col md:flex-row")
+
+				.none.landing.rel(class="h-full grow flex justify-center justify-items-center content-center")
+					.firstlink(class="self-center flex flex-col max-w-64")
+						+svg_mv()
+						.req_explain.none(class="")
+							p.BmarXLg.HpadXXLg.sizeSm.whitetranspTXT
+								| For an enhanced experience and best graphic performance, we suggest you using
+							a.block.Hmar.sizeR(href="https://brave.com/download/" target='_blank') Brave browser.
+							p.BmarXLg.HpadXXLg.sizeSm.whitetranspTXT
+								| <br> Otherwise, from your phone. <br> You may also just continue normally.
+						+gen_alpha_link('Enter', null, 'enterlink')
+				//- here should include the correct template along section
+	.shadernav.abs.top0.left0.zi30(class="w-28")
+			+lr_arrows('l', 't', 'Tmar LmarLg')
+	
+	//- script(type="text/javascript", src="/js/strawnode_app/strawnode_modules/strawnode_modules/jade.js") 
+	//- script(type="text/javascript", src="/js/strawnode_app/strawnode_modules/strawnode_modules/marked.js") 
+	script(type="text/javascript" src="/js/strawnode_app/strawnode_modules/strawnode_modules/i18next.js")
+	script(type="text/javascript" src="/js/strawnode_app/strawnode_modules/strawnode_modules/shadertoylite.js")
+	script(type="text/javascript", src="/js/strawnode.js?starter=./strawnode_app/")
+
+	//- here loading in relative breaks the direct deeplinking feature coming from url with no /#/en/...
+	
+	script(type="text/javascript").
+		// was inited for JSAddress
+		var ajaxified = true ;
+
+		// i18next
+		let resources = !{JSON.stringify(resources)} ;
+		//trace(resources[0])
+		i18next.init({
+			//- lng: 'en', // if you're using a language detector, do not define the lng option
+			//- debug: true,
+			fallbackLng: ["en"],
+			resources: resources[0]
+		}) ;
+
+		$('.landing')
+
+		//- When having sections given through express/jade
+		//- let sections_JSON = !{JSON.stringify(topsections)} ;
+		//- window.Data = sections_JSON ;
+		
+
+		////////// Actual Start
+		var startSite = function(delayed){
+			$('.landing').remove() ;
+			return setTimeout(function(){
+				
+				Express.app.fire('JSAddress') ;
+			}, 1) ;
+		}
+
+		/////////////////////////////////////////// LANDING PAGE
+		var need_landing = parseInt(localStorage.need_landing || 1) ;
+		var isBrave = Kompat.instance.isBrave ;
+		trace('isBrave', isBrave)
+		isBrave = isBrave || Kompat.instance.isMobile ;
+		if(need_landing){
+			$('.landing').removeClass('none') ;
+			if(!isBrave) $('.req_explain').removeClass('none') ;
+			$('.enterlink').on('mousedown', function(e){
+				$('.enterlink').remove() ;
+				
+				localStorage.need_landing = 0 ;
+				startSite(true) ;
+			})
+		}else{
+			startSite(false) ;
+		}
+
